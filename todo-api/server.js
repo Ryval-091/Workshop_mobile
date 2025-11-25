@@ -38,6 +38,22 @@ app.post('/todos', async (req,res) => {
     }
 });
 
+app.patch('/todos/:id/toggle', async (req, res) => {
+    try{
+        const todo = await Todo.findByPk(req.params.id);
+        if(todo){
+            await todo.update({ completed: todo.completed});
+            res.json(todo);
+        }
+        else{
+            res.status(404).json({message: 'Item not found'});
+        }
+    }
+    catch(error){
+        res.status(400).json({error: 'Failed to Toggle Item'});
+    }
+});
+
 // menjalankan server 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
